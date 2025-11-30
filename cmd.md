@@ -4,17 +4,19 @@
 
 ### 1. Create Virtual Environment
 ```bash
+cd backend
 python -m venv venv
 ```
 
 ### 2. Install Python Dependencies
 ```bash
+cd backend
 venv\Scripts\pip install -r requirements.txt
 ```
 
 ### 3. Install Frontend Dependencies
 ```bash
-cd frontend
+cd ../frontend
 npm install
 cd ..
 ```
@@ -25,6 +27,7 @@ cd ..
 
 ### Start Backend Server (Terminal 1)
 ```bash
+cd backend
 venv\Scripts\python main.py
 ```
 Backend runs on: `http://localhost:8000`
