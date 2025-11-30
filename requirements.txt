@@ -1,0 +1,6 @@
+pycryptodome==3.21.0
+PyPDF2==3.0.1
+python-dotenv
+fastapi
+python-multipart
+uvicorn
