@@ -41,11 +41,13 @@ async def unlock_pdf(
         # Write to output stream
         output_stream = io.BytesIO()
         writer.write(output_stream)
-        output_stream.seek(0)
+        
+        # Get the bytes and create a new BytesIO for the response
+        pdf_bytes = output_stream.getvalue()
         
         # Return as a downloadable file
         return StreamingResponse(
-            output_stream,
+            io.BytesIO(pdf_bytes),
             media_type="application/pdf",
             headers={"Content-Disposition": f'attachment; filename="unlocked_{file.filename}"'}
         )
