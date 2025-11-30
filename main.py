@@ -9,7 +9,7 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite default port
+    allow_origins=["http://localhost:5173", "http://localhost:5174"],  # Allow both Vite ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -59,4 +59,11 @@ async def unlock_pdf(
 
 if __name__ == "__main__":
     import uvicorn
+    import asyncio
+    import sys
+    
+    # Fix for Windows asyncio connection reset error
+    if sys.platform == 'win32':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    
     uvicorn.run(app, host="0.0.0.0", port=8000)
