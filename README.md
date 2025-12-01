@@ -1,14 +1,18 @@
-# PDF Password Remover
+# PDF Password Manager
 
-A web application that removes passwords from PDF files using a FastAPI backend and React frontend.
+A web application that manages passwords for PDF files using a FastAPI backend and React frontend.
 
 ## Features
 
 - Secure password-removal for PDF files
+- Secure password-addition for PDF files
 - Web-based interface for easy use
 - RESTful API backend built with FastAPI
 - Modern React frontend
 - Cross-platform compatibility
+- Toggle between unlock and lock operations
+- Password confirmation for enhanced security
+- Responsive design
 
 ## Project Structure
 
@@ -27,6 +31,9 @@ remove password/
 │   ├── src/
 │   ├── package.json
 │   └── ...
+├── scripts/                   # Utility scripts
+│   └── find_large_files.py    # Script to find files with >200 lines
+├── TODO.md                    # Feature roadmap
 ├── README.md                  # This file
 └── .gitignore
 ```
@@ -48,106 +55,29 @@ cd remove password
 
 ### 2. Backend Setup
 
-Navigate to the backend directory and set up Python virtual environment:
-
-```bash
-cd backend
-python -m venv venv
-```
-
-On Windows:
-```bash
-venv\Scripts\activate
-```
-
-On macOS/Linux:
-```bash
-source venv/bin/activate
-```
-
-Install Python dependencies:
-
-```bash
-pip install -r requirements.txt
-```
+For backend setup, API documentation, and running instructions, see [backend/README.md](backend/README.md).
 
 ### 3. Frontend Setup
 
-From the project root directory:
-
-```bash
-cd frontend
-npm install
-```
+For frontend setup and usage instructions, see [frontend/README.md](frontend/README.md).
 
 ## Running the Application
 
 ### 1. Start Backend Server
 
-From the project root directory:
-
-```bash
-cd backend
-venv\Scripts\activate  # On Windows
-# or source venv/bin/activate # On macOS/Linux
-python main.py
-```
+See instructions in [backend/README.md](backend/README.md).
 
 The backend server runs on: `http://localhost:8000`
 
 ### 2. Start Frontend Server
 
-Open a new terminal, navigate to the frontend directory and run:
-
-```bash
-cd frontend
-npm run dev
-```
+See instructions in [frontend/README.md](frontend/README.md).
 
 The frontend server runs on: `http://localhost:5173`
 
 ### 3. Using the Application
 
-1. Open your browser to `http://localhost:5173`
-2. Drag & drop your locked PDF or click to browse
-3. Enter the PDF password
-4. Click "Unlock & Download"
-5. The unlocked PDF will download automatically
-
-## API Documentation
-
-The backend provides a `/api/unlock` endpoint that accepts:
-- **Method**: POST
-- **Form Data**:
-  - `file`: The PDF file to unlock
-  - `password`: The password for the PDF
-- **Response**: The unlocked PDF file as a download
-
-Example using curl:
-```bash
-curl -X POST http://localhost:8000/api/unlock \
-  -F "file=@locked.pdf" \
-  -F "password=your_password"
-```
-
-## Testing
-
-The application includes backend tests in the `backend/tests/` directory:
-
-- `test_api.py`: Test script for the API functionality
-- Sample PDF files for testing
-
-To run the test:
-```bash
-cd backend/tests
-python test_api.py
-```
-
-Note: The test API script uses environment variables for passwords. Set `TEST_PDF_PASSWORD` in a `.env` file or environment.
-
-## Stopping the Servers
-
-Press `Ctrl+C` in each terminal window to stop the respective servers.
+Using instructions are available in [frontend/README.md](frontend/README.md).
 
 ## Security Practices
 

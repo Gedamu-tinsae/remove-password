@@ -5,3 +5,4 @@ __pycache__/
 node_modules/
 frontend/dist/
 scripts/large_files_loc.txt
+.vscode/settings.json
