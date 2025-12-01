@@ -4,4 +4,4 @@ __pycache__/
 .env
 node_modules/
 frontend/dist/
-test_unlocked.pdf
+scripts/large_files_loc.txt
