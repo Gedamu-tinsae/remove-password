@@ -7,9 +7,11 @@ import './styles/components.css';
 function App() {
   const [file, setFile] = useState(null);
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [operation, setOperation] = useState('unlock'); // 'unlock' or 'lock'
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -49,7 +51,7 @@ function App() {
     }
   };
 
-  const handleUnlock = async (e) => {
+  const handleOperation = async (e) => {
     e.preventDefault();
 
     if (!file) {
@@ -62,37 +64,45 @@ function App() {
       return;
     }
 
+    if (operation === 'lock' && password !== confirmPassword) {
+      setStatus('Passwords do not match');
+      return;
+    }
+
     setLoading(true);
-    setStatus('Unlocking PDF...');
+    setStatus(operation === 'unlock' ? 'Unlocking PDF...' : 'Locking PDF...');
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('password', password);
 
     try {
-      const response = await fetch('http://localhost:8000/api/unlock', {
+      const apiUrl = operation === 'unlock' ? 'http://localhost:8000/api/unlock' : 'http://localhost:8000/api/lock';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.detail || 'Failed to unlock PDF');
+        throw new Error(error.detail || `Failed to ${operation} PDF`);
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `unlocked_${file.name}`;
+      let downloadName = operation === 'unlock' ? `unlocked_${file.name}` : `locked_${file.name}`;
+      a.download = downloadName;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      setStatus('PDF unlocked successfully! Download started.');
+      setStatus(`PDF ${operation}ed successfully! Download started.`);
       setFile(null);
       setPassword('');
+      setConfirmPassword('');
     } catch (error) {
       setStatus(`Error: ${error.message}`);
     } finally {
@@ -104,12 +114,32 @@ function App() {
     <div className="app">
       <div className="container">
         <div className="header">
-          <div className="icon">🔓</div>
-          <h1>PDF Unlocker</h1>
-          <p>Remove password protection from your PDF files</p>
+          <div className="icon">{operation === 'unlock' ? '🔓' : '🔒'}</div>
+          <h1>{operation === 'unlock' ? 'PDF Unlocker' : 'PDF Locker'}</h1>
+          <p>
+            {operation === 'unlock' 
+              ? 'Remove password protection from your PDF files' 
+              : 'Add password protection to your PDF files'}
+          </p>
+          
+          {/* Operation toggle */}
+          <div className="operation-toggle">
+            <button 
+              className={`toggle-btn ${operation === 'unlock' ? 'active' : ''}`}
+              onClick={() => setOperation('unlock')}
+            >
+              Unlock
+            </button>
+            <button 
+              className={`toggle-btn ${operation === 'lock' ? 'active' : ''}`}
+              onClick={() => setOperation('lock')}
+            >
+              Lock
+            </button>
+          </div>
         </div>
 
-        <form onSubmit={handleUnlock} className="form">
+        <form onSubmit={handleOperation} className="form">
           <div
             className={`upload-zone ${dragActive ? 'drag-active' : ''} ${file ? 'has-file' : ''}`}
             onDragEnter={handleDrag}
@@ -141,33 +171,47 @@ function App() {
           </div>
 
           <div className="input-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{operation === 'unlock' ? 'Current Password' : 'New Password'}</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter PDF password"
+              placeholder={operation === 'unlock' ? 'Enter current password' : 'Enter new password'}
               disabled={loading}
             />
           </div>
 
-          <button type="submit" disabled={loading || !file || !password} className="unlock-btn">
+          {operation === 'lock' && (
+            <div className="input-group">
+              <label htmlFor="confirm-password">Confirm Password</label>
+              <input
+                id="confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm new password"
+                disabled={loading}
+              />
+            </div>
+          )}
+
+          <button type="submit" disabled={loading || !file || !password || (operation === 'lock' && password !== confirmPassword)} className="unlock-btn">
             {loading ? (
               <>
                 <span className="spinner"></span>
-                Unlocking...
+                {operation === 'unlock' ? 'Unlocking...' : 'Locking...'}
               </>
             ) : (
               <>
-                <span>🔓</span>
-                Unlock & Download
+                <span>{operation === 'unlock' ? '🔓' : '🔒'}</span>
+                {operation === 'unlock' ? 'Unlock & Download' : 'Lock & Download'}
               </>
             )}
           </button>
 
           {status && (
-            <div className={`status ${status.includes('Error') || status.includes('Please') ? 'error' : 'success'}`}>
+            <div className={`status ${status.includes('Error') || status.includes('Please') || status.includes('match') ? 'error' : 'success'}`}>
               {status}
             </div>
           )}

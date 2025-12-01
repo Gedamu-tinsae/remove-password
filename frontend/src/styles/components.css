@@ -225,6 +225,37 @@
   animation: spin 0.8s linear infinite;
 }
 
+/* Operation Toggle Styles */
+.operation-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  justify-content: center;
+}
+
+.toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.toggle-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
 /* Status Styles */
 .status {
   padding: 1rem 1.25rem;
