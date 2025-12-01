@@ -1,0 +1,67 @@
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.app::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, transparent 70%);
+  top: -250px;
+  right: -250px;
+  border-radius: 50%;
+  animation: pulse 8s ease-in-out infinite;
+}
+
+.app::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(30, 144, 255, 0.15) 0%, transparent 70%);
+  bottom: -200px;
+  left: -200px;
+  border-radius: 50%;
+  animation: pulse 10s ease-in-out infinite;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 550px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.6s ease-out;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .upload-zone {
+    padding: 2rem 1.5rem;
+  }
+}
